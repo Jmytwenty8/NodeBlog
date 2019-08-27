@@ -41,9 +41,6 @@ app.get('/', async(req,res)=>{
 })
 
 
-app.get('/about', (req,res)=>{
-    res.render('about')
-})
 
 
 app.get('/post/:id', async(req,res)=>{
@@ -55,9 +52,6 @@ app.get('/post/:id', async(req,res)=>{
 })
 
 
-app.get('/contact', (req,res)=>{
-    res.render('contact')
-})
 
 app.get('/create',(req,res)=>{
     res.render('create')
