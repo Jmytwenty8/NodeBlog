@@ -4,6 +4,11 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const Post = require('./database/models/Posts')
 const fileUpload = require('express-fileupload')
+const homePage = require('./controllers/homePage')
+const createPost = require('./controllers/createPost')
+const getPost = require('./controllers/getPost')
+const storePost = require('./controllers/storePost')
+const validationPostMiddleware = require('./middleware/storePost')
 
 const app = new express()
 
@@ -19,57 +24,19 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
 
-const validationPostMiddleware = (req, res, next) => {
-    if(!req.body.title || !req.body.subtitle || !req.body.username || !req.body.content || !req.files){
-        return res.redirect('/create')
-    }
 
-    next() 
-}
 
 app.use('/post/store', validationPostMiddleware)
 
 
 
-app.get('/', async(req,res)=>{
+app.get('/', homePage)
 
-    const posts = await Post.find({})
-    console.log(posts)
-    res.render('index', {
-        posts: posts
-    })
-})
+app.get('/post/:id', getPost)
 
+app.get('/create', createPost)
 
-
-
-app.get('/post/:id', async(req,res)=>{
-    const posts = await Post.findById(req.params.id)
-    console.log(req.params)
-    res.render('post',{
-        posts:posts
-    })
-})
-
-
-
-app.get('/create',(req,res)=>{
-    res.render('create')
-})
-
-
-app.post('/post/store', (req,res)=>{
-    const images  = req.files.image
-
-    images.mv(path.resolve(__dirname, 'public/posts', images.name),(error)=>{
-        Post.create({
-            ...req.body,
-            image : `/posts/${images.name}`
-        },(error, post)=>{
-            res.redirect('/')
-        })
-    })
-})
+app.post('/post/store', storePost)
 
 
 
