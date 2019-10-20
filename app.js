@@ -8,6 +8,8 @@ const getPost = require('./controllers/getPost')
 const storePost = require('./controllers/storePost')
 const createUser = require('./controllers/createUser')
 const storeUser = require('./controllers/storeUser')
+const createComment = require('./controllers/createComment')
+const getComment =  require('./controllers/getComment')
 const validationPostMiddleware = require('./middleware/storePost')
 
 const app = new express()
@@ -31,6 +33,10 @@ app.use('/post/store', validationPostMiddleware)
 app.get('/', homePage)
 
 app.get('/post/:id', getPost)
+
+app.post('/post/comment', createComment)
+
+app.get('/post/:id', getComment)
 
 app.get('/create', createPost)
 
